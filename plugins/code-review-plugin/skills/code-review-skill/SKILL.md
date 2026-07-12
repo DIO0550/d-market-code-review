@@ -1,6 +1,6 @@
 ---
 name: code-review-skill
-description: 言語共通のコードレビュースキル。コメント最適化、マジックナンバー検出、構造改善のレビューを実施。コードレビュー、PRレビュー、コード品質チェックを依頼された際に使用。
+description: 言語共通のコードレビュースキル。コメント最適化、マジックナンバー検出、構造改善、防御的コード・フォールバックのレビューを実施。コードレビュー、PRレビュー、コード品質チェックを依頼された際に使用。
 ---
 
 # Code Review Skill
@@ -14,6 +14,7 @@ description: 言語共通のコードレビュースキル。コメント最適�
 | コメント最適化 | Why/Docコメント以外を削除・置換 | [comment-review.md](references/comment-review.md) |
 | マジックナンバー | 意味不明な数値・文字列リテラルの検出 | [magic-number-review.md](references/magic-number-review.md) |
 | 構造改善 | Guard Clauses、Dead Code等の検出 | [structure-review.md](references/structure-review.md) |
+| 防御的コード | 不要なフォールバック・「念のため」の防御的コードの検出 | [defensive-code-review.md](references/defensive-code-review.md) |
 
 ## 使用方法
 
