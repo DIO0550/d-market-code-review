@@ -16,54 +16,50 @@ Claude CodeからGitHub Copilot CLIにコードレビューを委譲するスキ
 
 | 状況 | モード | コマンド |
 |------|--------|----------|
-| コミット前チェック | `staged` | `scripts/review.sh staged` |
-| 作業中の全変更確認 | `uncommitted` | `scripts/review.sh uncommitted` |
-| 特定ファイル精査 | `file` | `scripts/review.sh file <path>` |
-| 複数ファイル一括 | `files` | `scripts/review.sh files <path1> <path2>` |
-| PR作成前 | `branch` | `scripts/review.sh branch <base> <target>` |
-| コミット検証 | `commit` | `scripts/review.sh commit <hash>` |
-| PRレビュー | `pr` | `scripts/review.sh pr <base_branch>` |
+| コミット前チェック | `staged` | `${CLAUDE_SKILL_DIR}/scripts/review.sh staged` |
+| 作業中の全変更確認 | `uncommitted` | `${CLAUDE_SKILL_DIR}/scripts/review.sh uncommitted` |
+| 特定ファイル精査 | `file` | `${CLAUDE_SKILL_DIR}/scripts/review.sh file <path>` |
+| 複数ファイル一括 | `files` | `${CLAUDE_SKILL_DIR}/scripts/review.sh files <path1> <path2>` |
+| PR作成前 | `branch` | `${CLAUDE_SKILL_DIR}/scripts/review.sh branch <base> <target>` |
+| コミット検証 | `commit` | `${CLAUDE_SKILL_DIR}/scripts/review.sh commit <hash>` |
+| PRレビュー | `pr` | `${CLAUDE_SKILL_DIR}/scripts/review.sh pr <base_branch>` |
 
 ## 基本ワークフロー
 
 1. レビュー対象を決定（差分/ファイル/ブランチ）
-2. 適切なモードで`scripts/review.sh`を実行
+2. 適切なモードで `${CLAUDE_SKILL_DIR}/scripts/review.sh` を実行
 3. Copilotのフィードバックを確認
-4. 指摘事項を修正
+4. フィードバックをユーザーへ要約報告し、修正指示があれば対応する
 
 ## 使用例
 
 ```bash
 # ステージング済み差分をレビュー
-scripts/review.sh staged
+${CLAUDE_SKILL_DIR}/scripts/review.sh staged
 
 # セキュリティ観点でレビュー
-scripts/review.sh staged "Focus on security vulnerabilities"
+${CLAUDE_SKILL_DIR}/scripts/review.sh staged "Focus on security vulnerabilities"
 
 # 特定ファイルをレビュー
-scripts/review.sh file src/api/auth.ts
+${CLAUDE_SKILL_DIR}/scripts/review.sh file src/api/auth.ts
 
 # feature/authブランチをmainと比較してレビュー
-scripts/review.sh branch main feature/auth
+${CLAUDE_SKILL_DIR}/scripts/review.sh branch main feature/auth
 
 # PRレビュー（origin/mainとの差分）
-scripts/review.sh pr origin/main "Check for breaking API changes"
+${CLAUDE_SKILL_DIR}/scripts/review.sh pr origin/main "Check for breaking API changes"
 ```
 
 ## 直接コマンド実行
 
-スクリプトを使わず直接実行する場合：
+スクリプトを使わず直接実行する場合（`${CLAUDE_SKILL_DIR}/scripts/review.sh` と同様に、標準入力からパイプで渡す形式）：
 
 ```bash
-# 差分をプロンプトに含めて渡す
-copilot -p "Review this code diff. Report issues with severity, file, line range.
+# 差分を標準入力からパイプで渡す
+git diff --staged | copilot -p "Review this code diff. Report issues with severity, file, line range."
 
-$(git diff --staged)"
-
-# ファイル内容を含めて渡す
-copilot -p "Review this TypeScript file for issues.
-
-$(cat src/main.ts)"
+# ファイル内容を標準入力からパイプで渡す
+cat src/main.ts | copilot -p "Review this TypeScript file for issues. Report issues with severity, file, line range."
 ```
 
 ## カスタム指示
